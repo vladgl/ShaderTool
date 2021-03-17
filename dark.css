@@ -1,0 +1,25 @@
+QToolTip
+{
+    color: #000000;
+    background-color: #ffffff;
+    border: 1px solid white;
+}
+QToolBar {
+    border: 1px #1f1f1f;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+    stop: 0 #252525,
+    stop: 1 #202020
+    );
+}
+QToolBar::separator
+{
+    color: #313131;
+}
+
+
+QSplitter::handle
+{
+    background-color: #999999;
+}
+
+
