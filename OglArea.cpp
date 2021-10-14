@@ -3,7 +3,7 @@
 #include <QDebug>
 #include "Shaders.h"
 #include <QMouseEvent>
-
+#include <QTextBlock>
 OglArea::OglArea()
 {
     //this property tells widget to accept keybord focus both by tabbing and clicking
@@ -152,13 +152,14 @@ void OglArea::mouseMoveEvent(QMouseEvent *event)
 
 void OglArea::compileSource(QString const& src)
 {
+    bool failed = false;
+    QString error_str;
+
     this->makeCurrent();
     glDetachShader(shaderProgram, fragmentShader);
     glDeleteShader(fragmentShader);
 
     const char** fragmentSourceArray = new const char* [3];
-
-
 
     fragmentSourceArray[0] = FRAGMENT_SHADER_HEADER;
     auto tmp = src.toLocal8Bit();
@@ -168,34 +169,41 @@ void OglArea::compileSource(QString const& src)
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 3, fragmentSourceArray, nullptr);
 
-
     delete [] fragmentSourceArray;
-
 
     glCompileShader(fragmentShader);
     GLint status;
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
-    if(status == GL_FALSE)
+
+    GLchar infoLog[512];
+    glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
+
+    if(status != GL_TRUE)
     {
-        GLchar infoLog[512];
         glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-        qDebug() << infoLog;
+        failed = true;
+        error_str += QString(infoLog) + '\n';
     }
+
 
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
 
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &status);
-    if(status == GL_FALSE)
+    if(status != GL_TRUE)
     {
-        GLchar infoLog[512];
         glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
-        qDebug() << infoLog;
+        failed = true;
+        error_str += QString(infoLog) + '\n';
+    }
+
+    if(failed)
+    {
+        emit sourceFailedToCompile(error_str);
+        return;
     }
 
     glUseProgram(shaderProgram);
-
-
 
     GLint res_pos = glGetUniformLocation(shaderProgram, "iResolution");
     GLint mou_pos = glGetUniformLocation(shaderProgram, "iMouse");
@@ -208,6 +216,8 @@ void OglArea::compileSource(QString const& src)
     renderStart = sht::timer::now();
     renderPass = sht::timer::now();
     frame = 1;
+    emit sourceCompiled();
+    glErrorHandler();
 }
 
 

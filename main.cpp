@@ -15,6 +15,9 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    a.setApplicationName("Shader Tool");
+    a.setOrganizationName("no_org");
+
     qApp->setStyle(QStyleFactory::create("Fusion"));
     QPalette darkPalette;
     QColor windowColor = QColor(35, 35, 35);

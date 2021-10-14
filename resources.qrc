@@ -2,4 +2,11 @@
     <qresource prefix="/styles">
         <file>dark.css</file>
     </qresource>
+    <qresource prefix="/icn">
+        <file>icons/icon_open.png</file>
+        <file>icons/icon_reset.png</file>
+        <file>icons/icon_save.png</file>
+        <file>icons/icon_save_as.png</file>
+        <file>icons/icon_screenshot.png</file>
+    </qresource>
 </RCC>

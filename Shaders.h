@@ -26,7 +26,7 @@
 #define MAIN_IMAGE_BASIC_DEF \
     "void mainImage(out vec4 fragColor, in vec2 fragCoord) \n" \
     "{\n" \
-    "    fragColor = vec4(0.1, 0.7, 0.2, 1.0);\n" \
+    "    fragColor = vec4(0.1, 0.1, 0.1, 1.0);\n" \
     "}\n"
 
 #define FRAGMENT_MAIN \

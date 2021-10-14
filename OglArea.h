@@ -33,9 +33,13 @@ public:
     void initializeGL() override;
     void paintGL() override;
     void resizeGL(int w, int h) override;
+
+signals:
+    void sourceCompiled();
+    void sourceFailedToCompile(QString const& error_str);
+
 public slots:
     void compileSource(QString const& str);
-protected:
     void mouseMoveEvent(QMouseEvent* event) override;
 private:
 
